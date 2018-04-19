@@ -1,6 +1,4 @@
 // http://ionicframework.com/docs/theming/
-
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,3 +12,30 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+ion-menu {
+    .scroll-content {
+        overflow-y: auto;
+    }
+}
+
+.image {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+ion-menu.split-pane-side.menu-enabled {
+    max-width: 200px !important;
+}
+
+.scroll-content {
+    background-color: #f8f8f8
+}
+
+.toolbar-background {
+    background-color: #fff;
+    color: #fff;
+}
+
+ion-card {
+    border-radius: 10px !important;
+}

@@ -1,0 +1,23 @@
+page-login {
+    .login {
+        max-width: 40em;
+        display: block;
+        margin: 0 auto;
+        background-color: #ffffff;
+        margin-top: 5em;
+        box-shadow: 0 0 51px 0 #b2b2b2;
+        img {
+            width: 70%;
+            margin-bottom: 2em;
+        }
+        .err-msg {
+            position: relative;
+            padding-right: 25px;
+            font-size: 12px;
+            color: #fe3824 !important;
+            width: calc(100%);
+            margin-bottom: -10px;
+            margin-top: 5px;
+        }
+    }
+}

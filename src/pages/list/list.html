@@ -3,21 +3,37 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>Users List</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+<ion-content text-center>
+  <ion-row>
+    <ion-col tappable col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let user of usersArr">
+      <ion-card>
+    <ion-card-header>
+        <img class="userimg" [src]="user.profileurl" />
+      <b> {{user.firstName}} {{user.lastName}}</b>
+    </ion-card-header>
+    <ion-card-content *ngIf="user.unit">
+      Unit {{user.unit}}
+    </ion-card-content>
+    <ion-card-content *ngIf="user.name">
+      Unit {{user.unit}}
+    </ion-card-content>
+    <ion-row no-padding>
+      <ion-col text-right>
+        <button ion-button clear small color="danger" icon-start (tap)="removeUser(user)">
+          <ion-icon name='trash'></ion-icon>
+          Delete
+        </button>
+      </ion-col>
+    </ion-row>
+
+    </ion-card>
+    </ion-col>
+  </ion-row>
+  
+     
+ 
 </ion-content>

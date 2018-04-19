@@ -1,0 +1,23 @@
+page-news {
+    .userimg {
+        border-radius: 50%;
+        width: 120px;
+        height: 120px; // display: block;
+        // margin-left: auto;
+        // margin-right: auto;
+        // margin-bottom: 1em;
+    }
+    .elipsis {
+        display: block;
+        display: -webkit-box;
+        max-height: 76px;
+        -webkit-line-clamp: 4 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    .newspic {
+        max-height: 300px;
+        max-width:300px;
+    }
+}

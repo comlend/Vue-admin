@@ -1,37 +1,40 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { NavController, NavParams, MenuController, Events } from 'ionic-angular';
+import { GlobalsProvider } from '../../providers/globals/globals';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage {
-  selectedItem: any;
-  icons: string[];
-  items: Array<{title: string, note: string, icon: string}>;
+  usersArr: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public globals: GlobalsProvider, public firebase: FirebaseProvider, public events: Events, public zone: NgZone) {
+    
+    this.loadUserData();
 
-    // Let's populate this page with some filler content for funzies
-    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-    'american-football', 'boat', 'bluetooth', 'build'];
-
-    this.items = [];
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+    this.events.subscribe('userDeleted', () => {
+      this.zone.run(() => {
+        this.loadUserData();
       });
+    });
+    // console.log(this.usersArr);
+  }
+  loadUserData(){
+    this.usersArr = [];
+    for (let i = 0; i < this.globals.neighboursData.length; i++) {
+      if (this.globals.neighboursData[i].userType == 'owner' || this.globals.neighboursData[i].userType == 'renting') {
+        this.usersArr.push(this.globals.neighboursData[i]);
+      }
     }
   }
-
-  itemTapped(event, item) {
-    // That's right, we're pushing to ourselves!
-    this.navCtrl.push(ListPage, {
-      item: item
+  ionViewWillEnter(){
+    this.menuCtrl.enable(true);
+  }
+  removeUser(user){
+    this.firebase.deleteUser(user.uId).then( (success)=> {
+      alert('User Removed');
     });
   }
 }
