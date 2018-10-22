@@ -27,6 +27,7 @@ export class FirebaseProvider {
       resolve();
     });
   }
+
   deleteNews(newsId) {
     return new Promise((resolve, reject) => {
       firebase.database().ref('/news/').child(newsId).remove();
@@ -40,6 +41,7 @@ export class FirebaseProvider {
       resolve();
     });
   }
+
   logout() {
     return new Promise((resolve, reject) => {
       firebase.auth().signOut().then(() => {
@@ -70,12 +72,14 @@ export class FirebaseProvider {
 
     });
   }
+
   deleteAmenity(amenityId) {
     return new Promise((resolve, reject) => {
       firebase.database().ref('/buildingInfo/').child(amenityId).remove();
       resolve();
     });
   }
+
   public uploadPdf(data) {
     var filename = (new Date()).getTime() + '.pdf';
     let uploadTask = firebase.storage().ref('/pdf/' + filename).put(data);
@@ -90,6 +94,26 @@ export class FirebaseProvider {
         resolve(uploadTask.snapshot.downloadURL);
         return;
       });
+    });
+  }
+
+  editAmenity(details) {
+    console.log('Edit Details => ', details);
+
+    return new Promise((resolve, reject) => {
+      var dbref = firebase.database().ref('/buildingInfo/').child(details.id);
+
+      dbref.set({
+        id: details.id,
+        name: details.name,
+        text: details.text,
+        pdf: details.pdf,
+      }).then(() => {
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+
     });
   }
 

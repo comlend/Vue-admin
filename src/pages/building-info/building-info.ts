@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { GlobalsProvider } from '../../providers/globals/globals';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import * as _ from 'lodash';
 
 /**
  * Generated class for the BuildingInfoPage page.
@@ -22,9 +23,11 @@ export class BuildingInfoPage {
   buildingInfo: any;
   addNew: boolean = false;
   infoDetails: boolean = false;
-  name:any;
-  desciption:any;
-  uploadedPdfs:any = []
+  name: any;
+  desciption: any;
+  uploadedPdfs: any = [];
+  edit = false;
+  editDetails: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public globals: GlobalsProvider, public events: Events, public zone: NgZone, private firebase: FirebaseProvider) {
     this.buildingInfo = this.globals.buildingInfo;
@@ -40,19 +43,19 @@ export class BuildingInfoPage {
     console.log('ionViewDidLoad BuildingInfoPage');
   }
 
-  addnew(){
+  addnew() {
     this.addNew = true;
     this.infoDetails = false;
   }
-  submitInfo(){
 
+  submitInfo() {
     this.firebase.addAmenity(this.name, this.desciption, this.uploadedPdfs).then(() => {
       this.buildingInfo = this.globals.buildingInfo;
       this.addNew = false;
     })
   }
 
-  uploadPdf(){
+  uploadPdf() {
     document.getElementById('avatar').click();
   }
 
@@ -61,20 +64,20 @@ export class BuildingInfoPage {
     for (let selectedFile of [(<HTMLInputElement>document.getElementById('avatar')).files[0]]) {
 
       this.firebase.uploadPdf(selectedFile).then((data) => {
-        this.uploadedPdfs.push({'pdf':data});
+        this.uploadedPdfs.push({ 'pdf': data });
         this.hasPdf = true;
         console.log(this.uploadedPdfs);
       })
     }
   }
 
-  viewDetails(info){
+  viewDetails(info) {
     this.addNew = false;
     this.infoDetails = true;
     this.details = info;
   }
 
-  deletePdf(index){
+  deletePdf(index) {
     this.uploadedPdfs.splice(index, 1);
   }
 
@@ -83,6 +86,39 @@ export class BuildingInfoPage {
       alert('Building Info Removed');
       this.infoDetails = false;
     });
+  }
+
+  editBuildingInfo(details) {
+    this.edit = true;
+    this.editDetails = details;
+    console.log('Edit This Detail => ', this.editDetails);
+  }
+
+  cancelEdit() {
+    this.edit = false;
+    this.editDetails = null;
+  }
+
+  removePdf(pdf, i) {
+    this.editDetails.pdf.splice(i, 1);
+    // console.log('Remove Pdf => ', pdf, ' Index => ', i, ' editDetails => ', this.editDetails);
+  }
+
+  editInfo() {
+    _.map(this.uploadedPdfs, (pdf) => {
+      if (!this.editDetails.pdf) {
+        this.editDetails['pdf'] = [];
+      }
+
+      this.editDetails.pdf.push(pdf);
+
+    });
+
+    this.firebase.editAmenity(this.editDetails).then(() => {
+      this.uploadedPdfs = [];
+      this.buildingInfo = this.globals.buildingInfo;
+      this.edit = false;
+    })
   }
 
 }

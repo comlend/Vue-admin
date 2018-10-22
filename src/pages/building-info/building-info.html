@@ -69,15 +69,32 @@
 
         </ion-card-content>
       </ion-card>
-      <ion-card *ngIf="infoDetails">
+
+      <!-- Info / Not Edit / Delete -->
+      <ion-card *ngIf="infoDetails && !edit">
         <ion-card-header>
-          <ion-item no-padding>
-            <b>{{details.name}}</b>
-            <button ion-button item-end clear small color="danger" icon-start (tap)="deleteBuildingInfo(details.id)">
-              <ion-icon name='trash'></ion-icon>
-              Delete
-            </button>
-          </ion-item>
+          <ion-row>
+            <ion-col col-8 align-self-center text-left>
+              <ion-item no-padding>
+                <b>{{details.name}}</b>
+              </ion-item>
+            </ion-col>
+
+            <ion-col col-4 align-self-center text-right>
+              <ion-buttons end>
+                <button ion-button item-end clear small color="danger" icon-start (tap)="editBuildingInfo(details)">
+                  <ion-icon name='create'></ion-icon>
+                  Edit
+                </button>
+
+                <button ion-button item-end clear small color="danger" icon-start (tap)="deleteBuildingInfo(details.id)">
+                  <ion-icon name='trash'></ion-icon>
+                  Delete
+                </button>
+              </ion-buttons>
+            </ion-col>
+          </ion-row>
+
         </ion-card-header>
         <ion-card-content>
           <p *ngIf="details.text">{{details.text}}</p>
@@ -88,6 +105,68 @@
           </div>
         </ion-card-content>
 
+      </ion-card>
+
+      <!-- Info / Editable / Delete -->
+      <ion-card *ngIf="infoDetails && edit">
+        <ion-card-header>
+          <ion-row>
+            <ion-col align-self-center>
+              Add Building Amenity Information
+            </ion-col>
+            <ion-col col-3 align-self-center text-right>
+              <button ion-button icon-only clear color="danger" (click)="cancelEdit()">
+                <ion-icon name="close"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+          <hr>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list no-lines>
+            <ion-item no-padding>
+              <!-- <ion-label floating>Name</ion-label> -->
+              <ion-label stacked>Name</ion-label>
+              <ion-input type="text" [(ngModel)]="editDetails.name"></ion-input>
+            </ion-item>
+            <ion-item no-padding>
+              <ion-label stacked>Description</ion-label>
+              <ion-textarea type="text" [(ngModel)]="editDetails.text"></ion-textarea>
+            </ion-item>
+            <h4>--- Uploaded Pdf ---</h4>
+            <div *ngIf="editDetails.pdf">
+              <ion-list>
+                <ion-item *ngFor="let pdf of editDetails.pdf; let i = index" style="display: inline-block; width: 30%">
+                  <button ion-button icon-only item-right clear color="danger" (click)="removePdf(pdf, i)" style="position: absolute; top: 0; right: 2em;">
+                    <ion-icon name="close"></ion-icon>
+                  </button>
+                
+                  <a [href]='pdf.pdf' target='_blank'>
+                    <img src="assets/imgs/pdf.png" alt="pdf" style="width: 65%">
+                    View PDF {{i+1}}
+                  </a>
+                
+                
+                </ion-item>
+              </ion-list>
+            </div>
+
+            <ion-item no-padding>
+              <button ion-button small outline (click)="uploadPdf()">Uplaod PDF here</button>
+              <form>
+                <input hidden id="avatar" name="file" type="file" (change)="upload()">
+              </form>
+            </ion-item>
+
+            <div *ngFor="let pdf of uploadedPdfs; let i = index" style="display:inline-block;padding: 5px;position:relative;">
+              <img *ngIf="hasPdf" src='assets/imgs/pdf.png' />
+              <ion-icon name="ios-close-circle" color="danger" style="position: absolute; top: 0; right: 0" (tap)="deletePdf(i)"></ion-icon>
+            </div>
+          </ion-list>
+          <div padding></div>
+          <button ion-button round color="danger" (click)="editInfo()">Update Info</button>
+
+        </ion-card-content>
       </ion-card>
 
     </ion-col>
