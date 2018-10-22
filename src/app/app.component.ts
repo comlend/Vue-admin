@@ -12,6 +12,7 @@ import { BusinessPage } from '../pages/business/business';
 import { NewsPage } from '../pages/news/news';
 import { LocalPage } from '../pages/local/local';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { BuildingInfoPage } from '../pages/building-info/building-info';
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +35,7 @@ export class MyApp {
       { title: 'Businesses', component: BusinessPage },
       { title: 'News', component: NewsPage},
       { title: 'Local', component: LocalPage},
+      { title: 'Building Info', component: BuildingInfoPage},
       { title: 'Log Out', component: LoginPage }
     ];
 
@@ -62,12 +64,12 @@ export class MyApp {
   }
   initializeFirebase() {
     var config = {
-      apiKey: "AIzaSyCBSL955KUTWPvkJYNE-WzzFrN0UjidXMk",
-      authDomain: "aptapp-3b622.firebaseapp.com",
-      databaseURL: "https://aptapp-3b622.firebaseio.com",
-      projectId: "aptapp-3b622",
-      storageBucket: "aptapp-3b622.appspot.com",
-      messagingSenderId: "587368411111"
+      apiKey: "AIzaSyA4sBMDqCbQPeaCQ5L3xItosjDeW1Q4t28",
+      authDomain: "riseley-st.firebaseapp.com",
+      databaseURL: "https://riseley-st.firebaseio.com",
+      projectId: "riseley-st",
+      storageBucket: "riseley-st.appspot.com",
+      messagingSenderId: "257675727271"
     };
     firebase.initializeApp(config);
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -82,6 +84,7 @@ export class MyApp {
         console.log('new user ->', this.global.userId);
         var promises = [this.getUserData(), this.getNeighbours(), this.getAllNews(),this.getAllLocals()];
         Promise.all(promises).then((values) => {
+          this.fetchBuildinginfo();
           console.log('all data loaded', values);
 
             this.rootPage = HomePage;
@@ -200,6 +203,27 @@ export class MyApp {
             // }
           }
           // console.log('all comments',comments);
+          resolve();
+
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  fetchBuildinginfo() {
+    return new Promise((resolve, reject) => {
+      var dbRef = firebase.database().ref('/buildingInfo/');
+      var buildingInfo = [];
+      dbRef.on('value', (data) => {
+        if (data.val() != 'default') {
+          buildingInfo = _.toArray(data.val()).reverse();
+          this.global.buildingInfo = buildingInfo;
+          // this.global.localsCount = localsArr.length;
+          console.log('all building info in globals', this.global.buildingInfo);
+          this.event.publish('buildingInfoupdated');
+
           resolve();
 
         } else {

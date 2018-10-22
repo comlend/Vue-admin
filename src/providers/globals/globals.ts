@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class GlobalsProvider {
+  buildingInfo: any;
   userId: any;
   neighboursData: any;
   locals: any;

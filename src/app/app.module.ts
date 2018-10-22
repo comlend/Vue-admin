@@ -15,6 +15,7 @@ import { BusinessPage } from '../pages/business/business';
 import { NewsPage } from '../pages/news/news';
 import { NewsDetailsPage } from '../pages/news-details/news-details';
 import { LocalPage } from '../pages/local/local';
+import { BuildingInfoPage } from '../pages/building-info/building-info';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LocalPage } from '../pages/local/local';
     BusinessPage,
     NewsPage,
     NewsDetailsPage,
-    LocalPage
+    LocalPage,
+    BuildingInfoPage
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import { LocalPage } from '../pages/local/local';
     BusinessPage,
     NewsPage,
     NewsDetailsPage,
-    LocalPage
+    LocalPage,
+    BuildingInfoPage
   ],
   providers: [
     StatusBar,

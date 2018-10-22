@@ -9,7 +9,7 @@
 
 <ion-content text-center>
   <ion-row>
-    <ion-col tappable col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let user of usersArr">
+    <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let user of usersArr">
       <ion-card>
     <ion-card-header>
         <img class="userimg" [src]="user.profileurl" />
@@ -22,12 +22,12 @@
       Unit {{user.unit}}
     </ion-card-content>
     <ion-row no-padding>
-      <ion-col text-right>
+      <!-- <ion-col text-right>
         <button ion-button clear small color="danger" icon-start (tap)="removeUser(user)">
           <ion-icon name='trash'></ion-icon>
           Delete
         </button>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
 
     </ion-card>

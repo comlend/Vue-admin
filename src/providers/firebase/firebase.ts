@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { Events } from 'ionic-angular';
 import { GlobalsProvider } from '../globals/globals';
-
 /*
   Generated class for the FirebaseProvider provider.
 
@@ -51,5 +50,48 @@ export class FirebaseProvider {
       });
     });
   }
+
+  addAmenity(name, description, pdf){
+    return new Promise((resolve, reject) => {
+      // var uid = this.globals.userId;
+      // var createdAt = moment().format();
+      var dbref = firebase.database().ref('/buildingInfo/').push();
+
+      dbref.set({
+        id: dbref.key,
+        name: name,
+        text: description,
+        pdf: pdf,
+      }).then(() => {
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+
+    });
+  }
+  deleteAmenity(amenityId) {
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('/buildingInfo/').child(amenityId).remove();
+      resolve();
+    });
+  }
+  public uploadPdf(data) {
+    var filename = (new Date()).getTime() + '.pdf';
+    let uploadTask = firebase.storage().ref('/pdf/' + filename).put(data);
+    return new Promise((resolve, reject) => {
+      uploadTask.on('state_changed', (snapshot) => {
+
+      }, (err) => {
+        reject(false);
+      }, () => {
+        console.log(uploadTask.snapshot.downloadURL);
+
+        resolve(uploadTask.snapshot.downloadURL);
+        return;
+      });
+    });
+  }
+
 
 }
