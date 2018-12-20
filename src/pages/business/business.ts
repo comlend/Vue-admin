@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, LoadingController } from 'ionic-angular';
 import { GlobalsProvider } from '../../providers/globals/globals';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 /**
  * Generated class for the BusinessPage page.
@@ -17,7 +18,14 @@ import { GlobalsProvider } from '../../providers/globals/globals';
 export class BusinessPage {
   usersArr: any =[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public globals: GlobalsProvider, public menuCtrl: MenuController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public globals: GlobalsProvider, public menuCtrl: MenuController, public firebase: FirebaseProvider, public loadingCtrl: LoadingController) {
+    this.loadBusinessUsers();
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(true);
+  }
+  loadBusinessUsers(){
     this.usersArr = [];
     for (let i = 0; i < this.globals.neighboursData.length; i++) {
       if (this.globals.neighboursData[i].userType == 'business') {
@@ -26,12 +34,25 @@ export class BusinessPage {
     }
     console.log(this.usersArr);
   }
-
-  ionViewWillEnter() {
-    this.menuCtrl.enable(true);
-  }
   removeUser(user) {
+    let loading = this.loadingCtrl.create({
+      spinner: 'crescent'
+    });
 
+    loading.present();
+
+    this.firebase.deleteUser(user.uId).then((success) => {
+      if (success) {
+        loading.dismiss().then(()=>{
+          alert('User Removed');
+          this.loadBusinessUsers();
+        }).catch((error) => {
+          loading.dismiss();
+          alert('User Not Removed');
+        });
+        
+      }
+    });
   }
 
 }

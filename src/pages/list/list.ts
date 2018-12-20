@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, NavParams, MenuController, Events } from 'ionic-angular';
+import { NavController, NavParams, MenuController, Events, LoadingController } from 'ionic-angular';
 import { GlobalsProvider } from '../../providers/globals/globals';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
@@ -10,7 +10,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 export class ListPage {
   usersArr: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public globals: GlobalsProvider, public firebase: FirebaseProvider, public events: Events, public zone: NgZone) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController, public globals: GlobalsProvider, public firebase: FirebaseProvider, public events: Events, public zone: NgZone, public loadingCtrl: LoadingController) {
     
     this.loadUserData();
 
@@ -33,8 +33,21 @@ export class ListPage {
     this.menuCtrl.enable(true);
   }
   removeUser(user){
+    let loading = this.loadingCtrl.create({
+      spinner: 'crescent'
+    });
+
+    loading.present();
+
     this.firebase.deleteUser(user.uId).then( (success)=> {
-      alert('User Removed');
+      if (success) {
+        loading.dismiss();
+        alert('User Removed');
+        this.loadUserData();
+      }
+    }).catch((error) => {
+      loading.dismiss();
+      alert('User Not Removed');
     });
   }
 }

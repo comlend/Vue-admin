@@ -1,13 +1,7 @@
-<!--
-  Generated template for the BuildingInfoPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Building Info</ion-title>
+    <ion-title>House Rules</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -18,15 +12,15 @@
     <ion-col col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4>
       <ion-card>
         <ion-card-header>
-          Current Building Amenities
+          Current House Rules
           <hr>
         </ion-card-header>
         <ion-card-content>
           <ion-list no-lines>
-            <button ion-item *ngFor="let info of buildingInfo" (click)="viewDetails(info)">
+            <button ion-item *ngFor="let info of houseRules" (click)="viewDetails(info)">
               {{info.name}}
             </button>
-            <div *ngIf="buildingInfo.length == 0">
+            <div *ngIf="houseRules.length == 0">
               No Info available, add some.
             </div>
           </ion-list>
@@ -39,7 +33,7 @@
     <ion-col col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8>
       <ion-card *ngIf="addNew">
         <ion-card-header>
-          Add Building Amenity Information
+          Add House Rule Information
           <hr>
         </ion-card-header>
         <ion-card-content>
@@ -47,11 +41,11 @@
             <ion-item no-padding>
               <!-- <ion-label floating>Name</ion-label> -->
               <ion-label stacked>Name</ion-label>
-              <ion-input type="text" [(ngModel)]="name" placeholder="Air Conditioner, for example."></ion-input>
+              <ion-input type="text" [(ngModel)]="name" placeholder="Some important house rule"></ion-input>
             </ion-item>
             <ion-item no-padding>
               <ion-label stacked>Description</ion-label>
-              <ion-textarea type="text" [(ngModel)]="desciption" placeholder="Details about the operatability of the amentiy."></ion-textarea>
+              <ion-textarea type="text" [(ngModel)]="desciption" placeholder="Details about the house rule"></ion-textarea>
             </ion-item>
             <h4>--- OR ---</h4>
             <ion-item no-padding>
@@ -67,7 +61,7 @@
             <ion-spinner *ngIf="loading" name="bubbles"></ion-spinner>
           </ion-list>
           <div padding></div>
-          <button ion-button round color="danger" (click)="submitInfo()">Add Info</button>
+          <button ion-button round color="danger" (click)="submitInfo()">Add Rule</button>
 
         </ion-card-content>
       </ion-card>
@@ -99,10 +93,10 @@
 
         </ion-card-header>
         <ion-card-content>
-          <p *ngIf="details.text">{{details.text}}</p>
+          <p *ngIf="details.text" class="ws">{{details.text}}</p>
           <div *ngIf="details.pdf">
             <ion-item no-padding *ngFor="let pdf of details.pdf; let i = index">
-              <img src='assets/imgs/pdf.png' style="width:50px"/>
+              <img src='assets/imgs/pdf.png' style="width:50px" />
               <a [href]='pdf.pdf' target='_blank'>View PDF {{i+1}}</a>
             </ion-item>
           </div>
@@ -115,7 +109,7 @@
         <ion-card-header>
           <ion-row>
             <ion-col align-self-center>
-              Edit Building Amenity Information
+              Edit House Rule Information
             </ion-col>
             <ion-col col-3 align-self-center text-right>
               <button ion-button icon-only clear color="danger" (click)="cancelEdit()">
@@ -144,12 +138,12 @@
                     <ion-icon name="close"></ion-icon>
                   </button>
                   <img *ngIf="editDetails.pdf.length > 0" src="assets/imgs/pdf.png" alt="pdf" style="width: 65%">
-                  
-                  <a [href]='pdf.pdf' target='_blank'> 
+
+                  <a [href]='pdf.pdf' target='_blank'>
                     View PDF {{i+1}}
                   </a>
-                
-                
+
+
                 </ion-item>
               </ion-list>
             </div>

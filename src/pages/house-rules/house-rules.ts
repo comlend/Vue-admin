@@ -1,11 +1,10 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, Events } from 'ionic-angular';
 import { GlobalsProvider } from '../../providers/globals/globals';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import * as _ from 'lodash';
-
 /**
- * Generated class for the BuildingInfoPage page.
+ * Generated class for the HouseRulesPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -13,14 +12,13 @@ import * as _ from 'lodash';
 
 @IonicPage()
 @Component({
-  selector: 'page-building-info',
-  templateUrl: 'building-info.html',
+  selector: 'page-house-rules',
+  templateUrl: 'house-rules.html',
 })
-export class BuildingInfoPage {
-
+export class HouseRulesPage {
   hasPdf: boolean = false;
   details: any;
-  buildingInfo: any;
+  houseRules: any;
   addNew: boolean = false;
   infoDetails: boolean = false;
   name: any;
@@ -28,30 +26,29 @@ export class BuildingInfoPage {
   uploadedPdfs: any = [];
   edit = false;
   editDetails: any;
-  loading:boolean = false;
+  loading: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public globals: GlobalsProvider, public events: Events, public zone: NgZone, private firebase: FirebaseProvider) {
-    this.buildingInfo = this.globals.buildingInfo;
-    console.log(this.buildingInfo)
-    this.events.subscribe('buildingInfoupdated', () => {
+    this.houseRules = this.globals.houseRules;
+    console.log(this.houseRules)
+    this.events.subscribe('houseRulesupdated', () => {
       this.zone.run(() => {
-        this.buildingInfo = this.globals.buildingInfo;
+        this.houseRules = this.globals.houseRules;
       });
     });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad BuildingInfoPage');
+    console.log('ionViewDidLoad HouseRulesPage');
   }
-
   addnew() {
     this.addNew = true;
     this.infoDetails = false;
   }
 
   submitInfo() {
-    this.firebase.addAmenity(this.name, this.desciption, this.uploadedPdfs).then(() => {
-      this.buildingInfo = this.globals.buildingInfo;
+    this.firebase.addHouseRules(this.name, this.desciption, this.uploadedPdfs).then(() => {
+      this.houseRules = this.globals.houseRules;
       this.addNew = false;
       this.uploadedPdfs = [];
     })
@@ -85,10 +82,10 @@ export class BuildingInfoPage {
   }
 
   deleteBuildingInfo(buildingId) {
-    this.firebase.deleteAmenity(buildingId).then((success) => {
-      alert('Building Info Removed');
+    this.firebase.deleteHouseRules(buildingId).then((success) => {
+      alert('House Rule Info Removed');
       this.infoDetails = false;
-      this.buildingInfo = this.globals.buildingInfo;
+      this.houseRules = this.globals.houseRules;
     });
   }
 
@@ -117,9 +114,9 @@ export class BuildingInfoPage {
 
     });
 
-    this.firebase.editAmenity(this.editDetails).then(() => {
+    this.firebase.editHouseRules(this.editDetails).then(() => {
       this.uploadedPdfs = [];
-      this.buildingInfo = this.globals.buildingInfo;
+      this.houseRules = this.globals.houseRules;
       this.edit = false;
     })
   }

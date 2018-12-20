@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class GlobalsProvider {
+  houseRules: any;
   buildingInfo: any;
   userId: any;
   neighboursData: any;
@@ -31,6 +32,8 @@ export class GlobalsProvider {
     this.newsCount = 0;
     this.localsCount = 0;
     this.usersCount = 0;
+    this.houseRules = undefined;
+    this.buildingInfo = undefined;
   }
 
 }

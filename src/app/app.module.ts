@@ -16,6 +16,8 @@ import { NewsPage } from '../pages/news/news';
 import { NewsDetailsPage } from '../pages/news-details/news-details';
 import { LocalPage } from '../pages/local/local';
 import { BuildingInfoPage } from '../pages/building-info/building-info';
+import { HttpModule } from '@angular/http';
+import { HouseRulesPage } from '../pages/house-rules/house-rules';
 
 @NgModule({
   declarations: [
@@ -27,11 +29,13 @@ import { BuildingInfoPage } from '../pages/building-info/building-info';
     NewsPage,
     NewsDetailsPage,
     LocalPage,
-    BuildingInfoPage
+    BuildingInfoPage,
+    HouseRulesPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp, { mode: 'ios' }),
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -43,7 +47,8 @@ import { BuildingInfoPage } from '../pages/building-info/building-info';
     NewsPage,
     NewsDetailsPage,
     LocalPage,
-    BuildingInfoPage
+    BuildingInfoPage,
+    HouseRulesPage
   ],
   providers: [
     StatusBar,

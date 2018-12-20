@@ -13,6 +13,7 @@ import { NewsPage } from '../pages/news/news';
 import { LocalPage } from '../pages/local/local';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import { BuildingInfoPage } from '../pages/building-info/building-info';
+import { HouseRulesPage } from '../pages/house-rules/house-rules';
 
 @Component({
   templateUrl: 'app.html'
@@ -35,7 +36,8 @@ export class MyApp {
       { title: 'Businesses', component: BusinessPage },
       { title: 'News', component: NewsPage},
       { title: 'Local', component: LocalPage},
-      { title: 'Building Info', component: BuildingInfoPage},
+      { title: 'Building Info', component: BuildingInfoPage }, 
+      { title: 'House Rules', component: HouseRulesPage },
       { title: 'Log Out', component: LoginPage }
     ];
 
@@ -64,12 +66,12 @@ export class MyApp {
   }
   initializeFirebase() {
     var config = {
-      apiKey: "AIzaSyA4sBMDqCbQPeaCQ5L3xItosjDeW1Q4t28",
-      authDomain: "riseley-st.firebaseapp.com",
-      databaseURL: "https://riseley-st.firebaseio.com",
-      projectId: "riseley-st",
-      storageBucket: "riseley-st.appspot.com",
-      messagingSenderId: "257675727271"
+      apiKey: "AIzaSyAG4SM1ihvr7fPqU5C6mG2B2TZyVZImDkU",
+      authDomain: "vue-admin-85ef1.firebaseapp.com",
+      databaseURL: "https://vue-admin-85ef1.firebaseio.com",
+      projectId: "vue-admin-85ef1",
+      storageBucket: "vue-admin-85ef1.appspot.com",
+      messagingSenderId: "167187753572"
     };
     firebase.initializeApp(config);
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -85,11 +87,8 @@ export class MyApp {
         var promises = [this.getUserData(), this.getNeighbours(), this.getAllNews(),this.getAllLocals()];
         Promise.all(promises).then((values) => {
           this.fetchBuildinginfo();
-          console.log('all data loaded', values);
-
-            this.rootPage = HomePage;
-          
-
+          this.fetchHouseRules();
+          this.rootPage = HomePage;
         }).catch((err) => {
           console.log('Promise.all ', err);
         });
@@ -223,6 +222,26 @@ export class MyApp {
           // this.global.localsCount = localsArr.length;
           console.log('all building info in globals', this.global.buildingInfo);
           this.event.publish('buildingInfoupdated');
+
+          resolve();
+
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+  fetchHouseRules() {
+    return new Promise((resolve, reject) => {
+      var dbRef = firebase.database().ref('/houseRules/');
+      var houseRules = [];
+      dbRef.on('value', (data) => {
+        if (data.val() != 'default') {
+          houseRules = _.toArray(data.val()).reverse();
+          this.global.houseRules = houseRules;
+          // this.global.localsCount = localsArr.length;
+          console.log('all house rules info in globals', this.global.houseRules);
+          this.event.publish('houseRulesupdated');
 
           resolve();
 
